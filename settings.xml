@@ -1,0 +1,55 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>testify-snapshots</id>
+      <username>${env.CI_DEPLOY_USERNAME}</username>
+      <password>${env.CI_DEPLOY_PASSWORD}</password>
+    </server>
+  </servers>
+  <profiles>
+    <profile>
+      <id>testify</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <releases.repository.url>http://artifacts.codice.org/content/repositories/releases</releases.repository.url>
+        <snapshots.repository.url>http://artifacts.codice.org/content/repositories/snapshots</snapshots.repository.url>
+      </properties>
+      <repositories>
+        <repository>
+          <id>testify-snapshots</id>
+          <name>Codice Snapshots</name>
+          <releases>
+            <enabled>false</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </snapshots>
+          <url>http://artifacts.codice.org/content/repositories/snapshots</url>
+          <layout>default</layout>
+        </repository>
+        <repository>
+          <id>testify-releases</id>
+          <name>Codice Releases</name>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </snapshots>
+          <url>http://artifacts.codice.org/content/repositories/releases</url>
+          <layout>default</layout>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+</settings>
