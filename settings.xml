@@ -13,8 +13,8 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <releases.repository.url>http://artifacts.codice.org/content/repositories/releases</releases.repository.url>
-        <snapshots.repository.url>http://artifacts.codice.org/content/repositories/snapshots</snapshots.repository.url>
+        <releases.repository.url>http://artifacts.codice.org/content/repositories/travis-releases</releases.repository.url>
+        <snapshots.repository.url>http://artifacts.codice.org/content/repositories/travis-snapshots</snapshots.repository.url>
       </properties>
       <repositories>
         <repository>
@@ -30,7 +30,7 @@
             <updatePolicy>always</updatePolicy>
             <checksumPolicy>warn</checksumPolicy>
           </snapshots>
-          <url>http://artifacts.codice.org/content/repositories/snapshots</url>
+          <url>http://artifacts.codice.org/content/repositories/travis-snapshots</url>
           <layout>default</layout>
         </repository>
         <repository>
@@ -46,7 +46,7 @@
             <updatePolicy>always</updatePolicy>
             <checksumPolicy>warn</checksumPolicy>
           </snapshots>
-          <url>http://artifacts.codice.org/content/repositories/releases</url>
+          <url>http://artifacts.codice.org/content/repositories/travis-releases</url>
           <layout>default</layout>
         </repository>
       </repositories>
