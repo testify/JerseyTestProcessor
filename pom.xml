@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.codice.testify</groupId>
         <artifactId>testify-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
 
     <groupId>org.codice.testify.processors</groupId>
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>org.codice.testify</groupId>
             <artifactId>testify-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
