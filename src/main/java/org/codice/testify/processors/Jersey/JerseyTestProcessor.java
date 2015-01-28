@@ -25,8 +25,15 @@ import org.codice.testify.objects.Response;
 import org.codice.testify.processors.TestProcessor;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+
+import javax.net.ssl.*;
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Scanner;
 
 /**
@@ -48,6 +55,17 @@ public class JerseyTestProcessor implements BundleActivator, TestProcessor {
         if (request.getTestBlock().contains("<body>")) {
             testBlock = request.getTestBlock().substring(request.getTestBlock().indexOf("<body>") + 6, request.getTestBlock().indexOf("</body>")).trim();
             TestifyLogger.debug("REST Body: " + testBlock, this.getClass().getSimpleName());
+        }
+
+        // Trust all certificates
+        try {
+            doTrustToCertificates();
+        } catch (NoSuchAlgorithmException e) {
+            TestifyLogger.error("NoSuchAlgorithmException: " + e.getMessage(), this.getClass().getSimpleName());
+            return new Response(null);
+        } catch (KeyManagementException e) {
+            TestifyLogger.error("KeyManagementException: " + e.getMessage(), this.getClass().getSimpleName());
+            return new Response(null);
         }
 
         //Create a rest client pointing to the given endpoint
@@ -157,6 +175,41 @@ public class JerseyTestProcessor implements BundleActivator, TestProcessor {
         } else {
             return new Response(null);
         }
+    }
+
+    // Purpose: Accept all certificates
+    // Reference: https://gist.github.com/sandeepkunkunuru/7030828
+    //
+    public static void doTrustToCertificates() throws NoSuchAlgorithmException, KeyManagementException {
+        //Security.addProvider(new Provider()):
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                return;
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                return;
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        } };
+
+        // Set HttpsURLConnection settings
+        SSLContext sslContext = SSLContext.getInstance("SSL");
+        sslContext.init(null, trustAllCerts, new SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+        HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String s, SSLSession sslSession) {
+                return s.equalsIgnoreCase(sslSession.getPeerHost());
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
     }
 
     @Override
